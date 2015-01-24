@@ -21,3 +21,4 @@ extras/documentation
 
 .idea/
 application/configs/smtp.ini
+data/data.db

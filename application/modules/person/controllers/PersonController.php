@@ -41,10 +41,18 @@ class Person_PersonController extends Zend_Controller_Action
                 $mail->setSubject('Hello World!');
                 $mail->send();
 
-                $this->flash->addMessage(array('success' => 'Success'));
+                $this->flash->addMessage(array('success' => 'Email has been sent'));
 
-                $this->redirect('success');
+                $person = new Person_Model_Person($form->getValues());
+                $mapper = new Person_Model_PersonMapper();
 
+                if ($mapper->save($person)) {
+                  $this->flash->addMessage(array('success' => 'Person object has been sent'));
+                } else {
+                  $this->flash->addMessage(array('error' => 'Person object save error'));
+                }
+
+                $this->redirect('result');
 
             } else {
 
@@ -61,7 +69,7 @@ class Person_PersonController extends Zend_Controller_Action
 
     }
 
-    public function successAction()
+    public function resultAction()
     {
       // action body
     }

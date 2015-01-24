@@ -26,7 +26,13 @@
           </controllersDirectory>
           <formsDirectory enabled="false"/>
           <layoutsDirectory enabled="false"/>
-          <modelsDirectory/>
+          <modelsDirectory>
+            <modelFile modelName="Person"/>
+            <dbTableDirectory>
+              <dbTableFile dbTableName="Person"/>
+            </dbTableDirectory>
+            <modelFile modelName="PersonMapper"/>
+          </modelsDirectory>
           <servicesDirectory enabled="false"/>
           <viewsDirectory>
             <viewScriptsDirectory>

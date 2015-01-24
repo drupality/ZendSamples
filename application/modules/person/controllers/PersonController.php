@@ -69,6 +69,18 @@ class Person_PersonController extends Zend_Controller_Action
     {
     }
 
+    public function validateAction()
+    {
+      $this->_helper->viewRenderer->setNoRender();
+      $this->_helper->getHelper('layout')->disableLayout();
+
+      $form = $this->createPersonForm();
+      $form->isValid($form->getValues());
+
+      header('Content-Type: application/json');
+      echo Zend_Json::encode($form->getMessages());
+    }
+
     public function postDispatch()
     {
 

@@ -3,3 +3,25 @@
 echo $this->form;
 
 ?>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" ></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+	$('input').blur(function() {
+
+	  var label = $(this).parent().prev().find('label').attr('for');
+
+	  var data = {};
+	  var url = '/validate';
+
+	  $('input').each(function() {
+		data[$(this).attr('name')] = $(this).val();
+	  });
+
+	  $.post(url, data, function(response) {
+		console.log(response);
+	  }, 'json');
+
+	})
+
+  });
+</script>

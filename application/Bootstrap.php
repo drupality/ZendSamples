@@ -22,6 +22,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
       )
     );
     $frontController->getRouter()->addRoute('success', $route);
+
+    $route = new Zend_Controller_Router_Route(
+      'validate/', // The URL, after the baseUrl, with no params.
+      array(
+        'controller' => 'person', // The controller to point to.
+        'action'     => 'validate',  // The action to point to, in said Controller.
+        'module' => 'person',
+      )
+    );
+    $frontController->getRouter()->addRoute('validate', $route);
   }
 }
 

@@ -52,7 +52,7 @@ class Person_PersonController extends Zend_Controller_Action
 
             } else {
 
-                $this->setFlashMessage('Form validation error', 'error');
+                $this->view->messages = array('error' => array('Form validation error'));
 
             }
         }
@@ -148,7 +148,7 @@ class Person_PersonController extends Zend_Controller_Action
 
     private function flashMessengerNotEmpty() {
       $flash = $this->getFlashMessenger();
-      return $flash->hasCurrentMessages('success') || $flash->hasCurrentMessages('error');
+      return $flash->hasMessages('success') || $flash->hasMessages('error');
     }
 
     private function getFlashMessenger() {

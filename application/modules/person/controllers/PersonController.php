@@ -2,6 +2,7 @@
 
 class Person_PersonController extends Zend_Controller_Action
 {
+    private $flash;
 
     public function init()
     {
@@ -9,8 +10,48 @@ class Person_PersonController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->form = $this->createPersonForm();
+        $request = $this->getRequest();
+        $form = $this->createPersonForm();
+
+        if ($request->isPost()) {
+
+            $this->flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+
+
+
+            if ($form->isValid($_POST)) {
+
+                $this->flash->addMessage(array('success' => 'Success'));
+
+            } else {
+
+                $this->flash->addMessage(array('error' => 'Error'));
+
+            }
+        }
+
+
+        $this->view->form = $form;
+
+
         return $this->view->render('person/index.phtml');
+
+    }
+
+    public function postDispatch()
+    {
+        if (! isset($this->flash) || ! $this->flash->hasCurrentMessages()) {
+            return;
+        }
+
+        $messages = array();
+
+        foreach($this->flash->getMessages() as $message) {
+            $type = key($message);
+            $messages[$type] = $message[$type];
+        }
+
+        $this->view->messages = $messages;
 
     }
 

@@ -1,3 +1,10 @@
+<?php if (isset($this->messages)): ?>
+<ul class="messages">
+	<?php foreach($this->messages as $type => $message): ?>
+		<li class="message <?php echo $this->escape($type) ?>"><?php echo $this->escape($message) ?></li>
+	<?php endforeach ?>
+</ul>
+<?php endif ?>
 <?php
 
 echo $this->form;

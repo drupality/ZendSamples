@@ -42,7 +42,9 @@ class Person_PersonController extends Zend_Controller_Action
                 $mail->send();
 
                 $this->flash->addMessage(array('success' => 'Success'));
-                $this->redirect('/person/person/success');
+
+                $this->redirect('success');
+
 
             } else {
 

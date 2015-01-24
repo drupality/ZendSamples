@@ -17,8 +17,32 @@ echo $this->form;
 		data[$(this).attr('name')] = $(this).val();
 	  });
 
+	  $('.error-container').remove();
+
 	  $.post(url, data, function(response) {
-		console.log(response);
+
+		console.log(data);
+
+		for (var name in response) {
+		  if (response.hasOwnProperty(name)) {
+
+			var input = $('input[name="' + name + '"')[0];
+
+			if (! input) {
+			  return;
+			}
+
+			input = $(input);
+
+			var container = $('<div class="error-container"></div>').insertAfter(input);
+
+			for (var key in response[name]) {
+				$('<span class="error">' + response[name][key] + '</span>').appendTo(container);
+			}
+
+		  }
+		}
+
 	  }, 'json');
 
 	})

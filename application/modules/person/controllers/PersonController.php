@@ -75,7 +75,7 @@ class Person_PersonController extends Zend_Controller_Action
       $this->_helper->getHelper('layout')->disableLayout();
 
       $form = $this->createPersonForm();
-      $form->isValid($form->getValues());
+      $form->isValid($_POST);
 
       header('Content-Type: application/json');
       echo Zend_Json::encode($form->getMessages());
@@ -93,7 +93,7 @@ class Person_PersonController extends Zend_Controller_Action
         $flash = $this->getFlashMessenger();
 
 
-        $messages['success'] = $flash->getMessages('success');
+       $messages['success'] = $flash->getMessages('success');
         $messages['error'] = $flash->getMessages('error');
 
         $this->view->messages = $messages;

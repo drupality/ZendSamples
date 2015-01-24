@@ -21,6 +21,7 @@
           <controllersDirectory>
             <controllerFile controllerName="Person">
               <actionMethod actionName="index"/>
+              <actionMethod actionName="success"/>
             </controllerFile>
           </controllersDirectory>
           <formsDirectory enabled="false"/>
@@ -31,6 +32,9 @@
             <viewScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Person">
                 <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Person">
+                <viewScriptFile forActionName="success"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
@@ -46,6 +50,12 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Error">
             <viewScriptFile forActionName="error"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Person">
+            <viewScriptFile forActionName="success"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Person">
+            <viewScriptFile forActionName="success"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>

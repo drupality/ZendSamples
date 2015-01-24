@@ -1,0 +1,7 @@
+[smtp]
+ssl = "tls"
+port = 587
+auth = "login"
+username = "marek@softinn.eu"
+password = "EL=edY6L"
+host = "smtp.gmail.com"

@@ -2,7 +2,8 @@
 
 class Person_PersonController extends Zend_Controller_Action
 {
-    private $flash;
+
+    private $flash = null;
 
     public function init()
     {
@@ -17,11 +18,31 @@ class Person_PersonController extends Zend_Controller_Action
 
             $this->flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 
-
-
             if ($form->isValid($_POST)) {
 
+                $smtp_config = new Zend_Config_Ini(__DIR__ . '/../../../configs/smtp.ini', 'smtp');
+
+                $config = array(
+                  'ssl' => $smtp_config->ssl,
+                  'port' => $smtp_config->port,
+                  'auth' => $smtp_config->auth,
+                  'username' => $smtp_config->username,
+                  'password' => $smtp_config->password
+                );
+
+                $transport = new Zend_Mail_Transport_Smtp($smtp_config->host, $config);
+
+                Zend_Mail::setDefaultTransport($transport);
+
+                $mail = new Zend_Mail();
+                $mail->setBodyText('Email body here.');
+                $mail->setFrom('zendsamples@email.com', 'drupality');
+                $mail->addTo($form->getValue('email'), $form->getValue('first_name'));
+                $mail->setSubject('Hello World!');
+                $mail->send();
+
                 $this->flash->addMessage(array('success' => 'Success'));
+                $this->redirect('/person/person/success');
 
             } else {
 
@@ -36,6 +57,11 @@ class Person_PersonController extends Zend_Controller_Action
 
         return $this->view->render('person/index.phtml');
 
+    }
+
+    public function successAction()
+    {
+      // action body
     }
 
     public function postDispatch()
@@ -75,7 +101,7 @@ class Person_PersonController extends Zend_Controller_Action
           'filters'    => array('StringTrim'),
           'validators' => array(
             array('validator' => 'StringLength', 'options' => array(2, 50))
-          )
+          ),
         ));
 
         $form->addElement('password', 'pass', array(
@@ -83,7 +109,7 @@ class Person_PersonController extends Zend_Controller_Action
           'required'   => true,
           'filters'    => array('StringTrim'),
           'validators' => array(
-            array('validator' => 'StringLength', 'options' => array(6))
+            array('validator' => 'StringLength', 'options' => array(4))
           )
         ));
 
@@ -101,7 +127,7 @@ class Person_PersonController extends Zend_Controller_Action
           'label'    => 'Save',
         ));
 
-
+        $form->setDefaults(array('first_name' => 'John', 'last_name' => 'Doe'));
 
 
 
@@ -110,4 +136,6 @@ class Person_PersonController extends Zend_Controller_Action
 
 
 }
+
+
 

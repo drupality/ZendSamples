@@ -76,6 +76,16 @@
 <body>
 <div id="wrapper">
 
+  <?php if (isset($this->messages)): ?>
+    <ul class="messages">
+      <?php foreach($this->messages as $type => $sub_messages): ?>
+          <?php foreach($sub_messages as $message): ?>
+            <li class="message <?php echo $this->escape($type) ?>"><?php echo $this->escape($message) ?></li>
+          <?php endforeach ?>
+      <?php endforeach ?>
+    </ul>
+  <?php endif ?>
+
   <?php echo $this->layout()->content; ?>
 
 

@@ -3,8 +3,6 @@
 class Person_PersonController extends Zend_Controller_Action
 {
 
-    private $flash = null;
-
     public function init()
     {
     }
@@ -15,8 +13,6 @@ class Person_PersonController extends Zend_Controller_Action
         $form = $this->createPersonForm();
 
         if ($request->isPost()) {
-
-            $this->flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 
             if ($form->isValid($_POST)) {
 
@@ -41,22 +37,22 @@ class Person_PersonController extends Zend_Controller_Action
                 $mail->setSubject('Hello World!');
                 $mail->send();
 
-                $this->flash->addMessage(array('success' => 'Email has been sent'));
+                $this->setFlashMessage('Email has been sent', 'success');
 
                 $person = new Person_Model_Person($form->getValues());
                 $mapper = new Person_Model_PersonMapper();
 
                 if ($mapper->save($person)) {
-                  $this->flash->addMessage(array('success' => 'Person object has been saved'));
+                  $this->setFlashMessage('Person object has been saved', 'success');
                 } else {
-                  $this->flash->addMessage(array('error' => 'Person object save error'));
+                  $this->setFlashMessage('Person object save error', 'error');
                 }
 
                 $this->redirect('result');
 
             } else {
 
-                $this->flash->addMessage(array('error' => 'Error'));
+                $this->setFlashMessage('Form validation error', 'error');
 
             }
         }
@@ -71,24 +67,24 @@ class Person_PersonController extends Zend_Controller_Action
 
     public function resultAction()
     {
-      // action body
     }
 
     public function postDispatch()
     {
-        if (! isset($this->flash) || ! $this->flash->hasCurrentMessages()) {
+
+
+
+        if (! $this->flashMessengerNotEmpty()) {
             return;
         }
 
-        $messages = array();
+        $flash = $this->getFlashMessenger();
 
-        foreach($this->flash->getMessages() as $message) {
-            $type = key($message);
-            $messages[$type] = $message[$type];
-        }
+
+        $messages['success'] = $flash->getMessages('success');
+        $messages['error'] = $flash->getMessages('error');
 
         $this->view->messages = $messages;
-
     }
 
     private function createPersonForm()
@@ -142,6 +138,28 @@ class Person_PersonController extends Zend_Controller_Action
 
 
         return $form;
+    }
+
+    private function setFlashMessage($message, $namespace) {
+      $flash = $this->getFlashMessenger();
+      $flash->setNamespace($namespace);
+      $flash->addMessage($message, $namespace);
+    }
+
+    private function flashMessengerNotEmpty() {
+      $flash = $this->getFlashMessenger();
+      return $flash->hasCurrentMessages('success') || $flash->hasCurrentMessages('error');
+    }
+
+    private function getFlashMessenger() {
+      static $flash = null;
+
+      if (is_null($flash)) {
+        $flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+      }
+
+      return $flash;
+
     }
 
 

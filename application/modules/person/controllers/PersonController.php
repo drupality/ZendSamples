@@ -47,7 +47,7 @@ class Person_PersonController extends Zend_Controller_Action
                 $mapper = new Person_Model_PersonMapper();
 
                 if ($mapper->save($person)) {
-                  $this->flash->addMessage(array('success' => 'Person object has been sent'));
+                  $this->flash->addMessage(array('success' => 'Person object has been saved'));
                 } else {
                   $this->flash->addMessage(array('error' => 'Person object save error'));
                 }

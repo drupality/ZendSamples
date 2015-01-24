@@ -16,34 +16,15 @@ class Person_PersonController extends Zend_Controller_Action
 
             if ($form->isValid($_POST)) {
 
-                $smtp_config = new Zend_Config_Ini(__DIR__ . '/../../../configs/smtp.ini', 'smtp');
-
-                $config = array(
-                  'ssl' => $smtp_config->ssl,
-                  'port' => $smtp_config->port,
-                  'auth' => $smtp_config->auth,
-                  'username' => $smtp_config->username,
-                  'password' => $smtp_config->password
-                );
-
-                $transport = new Zend_Mail_Transport_Smtp($smtp_config->host, $config);
-
-                Zend_Mail::setDefaultTransport($transport);
-
-                $mail = new Zend_Mail();
-                $mail->setBodyText('Email body here.');
-                $mail->setFrom('zendsamples@email.com', 'drupality');
-                $mail->addTo($form->getValue('email'), $form->getValue('first_name'));
-                $mail->setSubject('Hello World!');
-                $mail->send();
-
-                $this->setFlashMessage('Email has been sent', 'success');
 
                 $person = new Person_Model_Person($form->getValues());
                 $mapper = new Person_Model_PersonMapper();
 
                 if ($mapper->save($person)) {
                   $this->setFlashMessage('Person object has been saved', 'success');
+
+                  $this->sendEmail($form->getValue('email'), $form->getValue('first_name'));
+
                 } else {
                   $this->setFlashMessage('Person object save error', 'error');
                 }
@@ -172,6 +153,31 @@ class Person_PersonController extends Zend_Controller_Action
 
       return $flash;
 
+    }
+
+    private function sendEmail($email, $first_name) {
+      $smtp_config = new Zend_Config_Ini(__DIR__ . '/../../../configs/smtp.ini', 'smtp');
+
+      $config = array(
+        'ssl' => $smtp_config->ssl,
+        'port' => $smtp_config->port,
+        'auth' => $smtp_config->auth,
+        'username' => $smtp_config->username,
+        'password' => $smtp_config->password
+      );
+
+      $transport = new Zend_Mail_Transport_Smtp($smtp_config->host, $config);
+
+      Zend_Mail::setDefaultTransport($transport);
+
+      $mail = new Zend_Mail();
+      $mail->setBodyText('Email body here.');
+      $mail->setFrom('zendsamples@email.com', 'drupality');
+      $mail->addTo($email, $first_name);
+      $mail->setSubject('Hello World!');
+      $mail->send();
+
+      $this->setFlashMessage('Email has been sent', 'success');
     }
 
 

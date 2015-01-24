@@ -2,6 +2,14 @@
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
+
+  protected function _initDoctype()
+  {
+    $this->bootstrap('view');
+    $view = $this->getResource('view');
+    $view->doctype('HTML5');
+  }
+
   public function _initRoutes()
   {
     $frontController = Zend_Controller_Front::getInstance();
